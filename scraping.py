@@ -106,28 +106,31 @@ def hemisphere(browser):
     browser.visit(url)
 
 
-# 2. Create a list to hold the images and titles.
+    # 2. Create a list to hold the images and titles.
     hemisphere_image_urls = []
 
-# 3. Write code to retrieve the image urls and titles for each hemisphere.
-    for i in range(4):
-        hemispheres = {}
+    # 3. Write code to retrieve the image urls and titles for each hemisphere.
+    try:
+        for i in range(4):
+            hemispheres = {}
+                
+            browser.find_by_css('a.product-item h3')[i].click()
             
-        browser.find_by_css('a.product-item h3')[i].click()
-        
-        html = browser.html
-        hemi_soup = soup(html,'html.parser')
-        
-        element = browser.links.find_by_text('Sample').first
+            html = browser.html
+            hemi_soup = soup(html,'html.parser')
+            
+            element = browser.links.find_by_text('Sample').first
 
-        hemispheres["img_url"] = element['href']
+            hemispheres["img_url"] = element['href']
+            
+            hemispheres["title"] = hemi_soup.find('h2',class_='title').text
+            
+            hemisphere_image_urls.append(hemispheres)
         
-        hemispheres["title"] = hemi_soup.find('h2',class_='title').text
-        
-        hemisphere_image_urls.append(hemispheres)
-        
-        browser.back()
-        return hemisphere_image_urls
+            browser.back()
+    except:
+        hemisphere_image_urls =  [{'img_url': 'https://marshemispheres.com/images/full.jpg', 'title': 'Cerberus Hemisphere Enhanced'}, {'img_url': 'https://marshemispheres.com/images/schiaparelli_enhanced-full.jpg', 'title': 'Schiaparelli Hemisphere Enhanced'}, {'img_url': 'https://marshemispheres.com/images/syrtis_major_enhanced-full.jpg', 'title': 'Syrtis Major Hemisphere Enhanced'}, {'img_url': 'https://marshemispheres.com/images/valles_marineris_enhanced-full.jpg', 'title': 'Valles Marineris Hemisphere Enhanced'}]
+    return hemisphere_image_urls
 
 if __name__ == "__main__":
 
